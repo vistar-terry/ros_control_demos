@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<robot name="camera" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="usb_camera" params="prefix:=camera">
+        <link name="${prefix}_link">
+            <visual>
+                <origin xyz="0 0 0 " rpy="0 1.57 0" />
+                <geometry>
+                    <cylinder radius="0.02" length="0.05" />
+                </geometry>
+                <material name="gray">
+                    <color rgba="0.25 0.25 0.25 0.95" />
+                </material>
+            </visual>
+        </link>
+    </xacro:macro>
+
+</robot>

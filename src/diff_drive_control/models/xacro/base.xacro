@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<robot name="base" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- 属性列表 -->
+    <xacro:property name="M_PI" value="3.1415926" />
+    <xacro:property name="base_radius" value="0.20" />
+    <xacro:property name="base_length" value="0.16" />
+
+    <xacro:property name="wheel_radius" value="0.06" />
+    <xacro:property name="wheel_length" value="0.025" />
+    <xacro:property name="wheel_joint_y" value="0.19" />
+
+    <xacro:property name="caster_radius" value="0.015" />
+    <xacro:property name="caster_joint_x" value="0.18" />
+
+    <!-- 颜色列表 -->
+    <material name="yellow">
+        <color rgba="1 0.4 0 1" />
+    </material>
+    <material name="black">
+        <color rgba="0 0 0 0.95" />
+    </material>
+    <material name="gray">
+        <color rgba="0.25 0.25 0.25 0.95" />
+    </material>
+    <material name="white">
+        <color rgba="1 1 1 0.9" />
+    </material>
+
+    <!-- 轮子宏定义 -->
+    <xacro:macro name="wheel" params="prefix reflect">
+        <joint name="${prefix}_wheel_joint" type="continuous">
+            <origin xyz="0 ${reflect*wheel_joint_y} ${wheel_radius}" rpy="0 0 0" />
+            <parent link="base_link" />
+            <child link="${prefix}_wheel_link" />
+            <axis xyz="0 1 0" />
+        </joint>
+
+        <link name="${prefix}_wheel_link">
+            <visual>
+                <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
+                <geometry>
+                    <cylinder radius="${wheel_radius}" length="${wheel_length}" />
+                </geometry>
+                <material name="white" />
+            </visual>
+        </link>
+    </xacro:macro>
+
+    <!-- 脚轮宏定义 -->
+    <xacro:macro name="caster" params="prefix reflect">
+        <joint name="${prefix}_caster_joint" type="continuous">
+            <origin xyz="${reflect*caster_joint_x} 0 ${caster_radius}"
+                rpy="0 0 0" />
+            <parent link="base_link" />
+            <child link="${prefix}_caster_link" />
+            <axis xyz="0 1 0" />
+        </joint>
+
+        <link name="${prefix}_caster_link">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+                <geometry>
+                    <sphere radius="${caster_radius}" />
+                </geometry>
+                <material name="black" />
+            </visual>
+        </link>
+    </xacro:macro>
+
+    <!-- 底盘宏定义 -->
+    <xacro:macro name="mbot_base">
+
+        <link name="base_link">
+            <visual>
+                <origin xyz="0 0 ${2*caster_radius + base_length/2}" rpy="0 0 0" />
+                <geometry>
+                    <cylinder length="${base_length}" radius="${base_radius}" />
+                </geometry>
+                <material name="yellow" />
+            </visual>
+        </link>
+
+        <!-- 调用轮子宏 -->
+        <xacro:wheel prefix="base_l" reflect="-1" />
+        <xacro:wheel prefix="base_r" reflect="1" />
+
+        <!-- 调用脚轮宏 -->
+        <xacro:caster prefix="front" reflect="-1" />
+        <xacro:caster prefix="back" reflect="1" />
+    </xacro:macro>
+
+</robot>
