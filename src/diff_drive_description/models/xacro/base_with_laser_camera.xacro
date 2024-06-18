@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <robot name="mbot_with_laser_camera" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-    <xacro:include filename="$(find simulation_learning)/models/xacro/base.xacro" />
-    <xacro:include filename="$(find simulation_learning)/models/xacro/sensors/laser.xacro" />
-    <xacro:include filename="$(find simulation_learning)/models/xacro/sensors/camera.xacro" />
+    <xacro:include filename="$(find diff_drive_description)/models/xacro/base.xacro" />
+    <xacro:include filename="$(find diff_drive_description)/models/xacro/sensors/laser.xacro" />
+    <xacro:include filename="$(find diff_drive_description)/models/xacro/sensors/camera.xacro" />
 
     <xacro:property name="laser_offset_x" value="0" />
     <xacro:property name="laser_offset_y" value="0" />

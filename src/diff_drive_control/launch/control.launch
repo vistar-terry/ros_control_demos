@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<launch>
+
+
+  <!-- Load robot description -->
+  <include file="$(find diff_drive_description)/launch/xacro/base_with_laser_camera.launch">
+  </include>
+
+  <!-- Load controller configuration -->
+  <rosparam command="load" file="$(find diff_drive_control)/config/control.yaml" />
+
+  <node name="controller_manager" pkg="controller_manager" type="controller_manager" 
+    respawn="false" output="screen" ns="diff_drive" />
+
+  <!-- Spawn controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner"
+    respawn="false" output="screen" ns="diff_drive"
+    args="joint_controller velocity_controller" />
+  <!-- <rosparam param="wheel_radius_multiplier" ns="diff_drive_velocity_controller"
+  subst_value="True">
+  </rosparam> -->
+
+  <!-- <node pkg="interactive_marker_twist_server" type="marker_server" name="twist_marker_server"
+  output="screen">
+    <param name="link_name" value="base_link" />
+  </node> -->
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    ns="diff_drive" respawn="false" output="screen">
+    <remap from="/joint_states" to="/diff_drive/joint_states" />
+  </node>
+
+  <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
+    <param name="default_topic" value="/diff_drive/velocity_controller/cmd_vel" />
+  </node>
+  <!-- <node pkg="twist_mux" type="twist_mux" name="twist_mux">
+    <rosparam command="load" file="$(find diff_drive_control)/config/twist_mux.yaml" />
+    <remap from="cmd_vel_out" to="diff_drive_velocity_controller/cmd_vel"/>
+  </node> -->
+
+  <!-- Override the default control parameters, see config/empty.yaml for default. -->
+  <!-- <rosparam command="load" file="$(arg config_extras)" subst_value="true" /> -->
+
+</launch>

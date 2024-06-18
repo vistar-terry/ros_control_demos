@@ -82,12 +82,12 @@
         </link>
 
         <!-- 调用轮子宏 -->
-        <xacro:wheel prefix="base_l" reflect="-1" />
-        <xacro:wheel prefix="base_r" reflect="1" />
+        <xacro:wheel prefix="left" reflect="1" />
+        <xacro:wheel prefix="right" reflect="-1" />
 
         <!-- 调用脚轮宏 -->
-        <xacro:caster prefix="front" reflect="-1" />
-        <xacro:caster prefix="back" reflect="1" />
+        <xacro:caster prefix="front" reflect="1" />
+        <xacro:caster prefix="back" reflect="-1" />
     </xacro:macro>
 
 </robot>

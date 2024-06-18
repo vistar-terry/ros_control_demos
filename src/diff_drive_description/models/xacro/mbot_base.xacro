@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot name="mbot_base" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-    <xacro:include filename="$(find simulation_learning)/models/xacro/base.xacro" />
+    <xacro:include filename="$(find diff_drive_description)/models/xacro/base.xacro" />
 
     <!-- 调用底盘宏 -->
     <xacro:mbot_base />
