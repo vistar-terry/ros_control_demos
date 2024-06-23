@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- 加载机器人模型文件到参数服务器 -->
+    <param name="robot_description" command="$(find xacro)/xacro $(find diff_drive_description)/models/diff_drive_robot.xacro" />
+
+    <!-- 加载控制器配置文件 -->
+    <rosparam file="$(find diff_drive_control)/config/diff_drive_control.yaml" command="load"/>
+
+    <!-- 启动硬件接口节点 -->
+    <node name="diff_drive_hw_interface" pkg="diff_drive_control" type="diff_drive_control_node" output="screen"/>
+
+    <!-- 启动控制器管理器 -->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
+          args="joint_state_controller diff_drive_controller" />
+
+    <!-- 启动机器人状态发布节点 -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
+      <param name="publish_frequency" type="double" value="50.0" />
+    </node>
+
+    <!-- 启动 rviz 可视化窗口 -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find diff_drive_control)/config/diff_drive_control.rviz" />
+
+</launch>
