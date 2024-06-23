@@ -19,9 +19,10 @@ int main(int argc, char **argv)
     while (ros::ok())
     {
         ros::Duration period = rate.expectedCycleTime();
-        diff_drive.read(period);
-        cm.update(ros::Time::now(), period);
+        // diff_drive.read(period);
+        
         diff_drive.write(period);
+        cm.update(ros::Time::now(), period);
         rate.sleep();
     }
 
