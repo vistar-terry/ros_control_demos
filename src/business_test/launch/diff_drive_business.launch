@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <launch>
 
-    <include file="$(find diff_drive_control)/diff_drive_control.launch"/>
+    <include file="$(find diff_drive_control)/launch/diff_drive_control.launch"/>
 
     <!-- 调用 rqt_robot_steering 工具控制机器人 -->
-    <!-- <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
+    <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
       <param name="default_topic" value="/diff_drive_controller/cmd_vel" />
-    </node> -->
+    </node>
 
     <!-- 模拟业务代码控制机器人 -->
     <!-- <node name="diff_drive_business" pkg="business_test" type="diff_drive_business"  output="screen" /> -->
