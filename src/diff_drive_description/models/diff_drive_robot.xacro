@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<robot name="mbot_with_laser_camera" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="diff_drive_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-    <xacro:include filename="$(find diff_drive_description)/models/xacro/base.xacro" />
-    <xacro:include filename="$(find diff_drive_description)/models/xacro/sensors/laser.xacro" />
-    <xacro:include filename="$(find diff_drive_description)/models/xacro/sensors/camera.xacro" />
+    <xacro:include filename="$(find diff_drive_description)/models/base.xacro" />
+    <xacro:include filename="$(find diff_drive_description)/models/sensors/laser.xacro" />
+    <xacro:include filename="$(find diff_drive_description)/models/sensors/camera.xacro" />
 
     <xacro:property name="laser_offset_x" value="0" />
     <xacro:property name="laser_offset_y" value="0" />
@@ -14,7 +14,7 @@
     <xacro:property name="camera_offset_z" value="0.165" />
 
     <!-- 调用base宏 -->
-    <xacro:mbot_base />
+    <xacro:diff_drive_base />
 
     <!-- laser_joint -->
     <joint name="laser_joint" type="fixed">

@@ -103,12 +103,26 @@ Visualization Manager:
       Value: true
       Visual Enabled: true
     - Class: rviz/TF
-      Enabled: false
+      Enabled: true
       Filter (blacklist): ""
       Filter (whitelist): ""
       Frame Timeout: 15
       Frames:
         All Enabled: true
+        back_caster_link:
+          Value: true
+        base_link:
+          Value: true
+        camera_link:
+          Value: true
+        front_caster_link:
+          Value: true
+        laser_link:
+          Value: true
+        left_wheel_link:
+          Value: true
+        right_wheel_link:
+          Value: true
       Marker Alpha: 1
       Marker Scale: 0.30000001192092896
       Name: TF
@@ -116,9 +130,21 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        {}
+        base_link:
+          back_caster_link:
+            {}
+          camera_link:
+            {}
+          front_caster_link:
+            {}
+          laser_link:
+            {}
+          left_wheel_link:
+            {}
+          right_wheel_link:
+            {}
       Update Interval: 0
-      Value: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -184,4 +210,4 @@ Window Geometry:
     collapsed: true
   Width: 1200
   X: 223
-  Y: 188
+  Y: 151

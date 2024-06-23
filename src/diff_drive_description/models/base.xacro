@@ -69,7 +69,7 @@
     </xacro:macro>
 
     <!-- 底盘宏定义 -->
-    <xacro:macro name="mbot_base">
+    <xacro:macro name="diff_drive_base">
 
         <link name="base_link">
             <visual>
