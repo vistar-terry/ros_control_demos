@@ -4,6 +4,11 @@ DiffDriveHWInterface::DiffDriveHWInterface(ros::NodeHandle &nh) : m_nh(nh)
 {
 }
 
+/**
+ * @brief 初始化关节信息
+ *        注册抽象硬件接口
+ * 
+ */
 void DiffDriveHWInterface::init()
 {
     std::vector<std::string> joint_names;
