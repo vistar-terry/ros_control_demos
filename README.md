@@ -45,7 +45,9 @@ ros_control 的简单示例，新手友好
     roslaunch business_test diff_drive_business.launch
     ```
 
+​		在rviz中的可视化结果：
 
+![Peek 2024-06-29 16-36](img/Peek 2024-06-29 16-36.gif)
 
 
 
