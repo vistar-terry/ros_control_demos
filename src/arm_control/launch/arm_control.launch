@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- 选择启动哪个关节控制器（两者占用相同关节，只能二选一）：
+         arm_trajectory_controller : 轨迹/action 接口，默认，可对接 MoveIt
+         arm_position_controller  : 直接下发一组关节角度，适合命令行调试 -->
+    <arg name="controller" default="arm_trajectory_controller" />
+    <arg name="rviz" default="true" />
+    <arg name="control_rate" default="100.0" />
+
+    <!-- 1. 把 UR20 的 URDF（含 transmission / PositionJointInterface）加载到参数服务器 -->
+    <include file="$(find arm_description)/launch/load_ur20.launch" />
+
+    <!-- 2. 加载关节列表、限位与控制器参数 -->
+    <rosparam file="$(find arm_control)/config/arm_control.yaml" command="load" />
+
+    <!-- 3. 启动硬件抽象节点 + controller_manager 控制循环 -->
+    <node name="arm_hw_interface" pkg="arm_control" type="arm_control_node" output="screen">
+        <param name="control_rate" type="double" value="$(arg control_rate)" />
+    </node>
+
+    <!-- 4. 加载并启动控制器 -->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner"
+          respawn="false" output="screen"
+          args="joint_state_controller $(arg controller)" />
+
+    <!-- 5. 由 /joint_states 计算并发布 TF -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
+        <param name="publish_frequency" type="double" value="50.0" />
+    </node>
+
+    <!-- 6. RViz 可视化 -->
+    <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz"
+          args="-d $(find arm_control)/config/arm_control.rviz" />
+
+</launch>

@@ -49,6 +49,34 @@ ros_control 的简单示例，新手友好
 
 ![Peek 2024-06-29 16-36](img/Peek_2024-06-29_16-36.gif)
 
+5. 运行机械臂 ros_control 节点
+
+    ```bash
+    # 默认启动位置轨迹控制器，提供 follow_joint_trajectory action（可对接 MoveIt）
+    roslaunch arm_control arm_control.launch
+
+    # 或者改用简单的一组关节角度控制器
+    roslaunch arm_control arm_control.launch controller:=arm_position_controller
+    rostopic pub -1 /arm_position_controller/command std_msgs/Float64MultiArray \
+      "data: [0.0, -1.57, 1.57, -1.57, 0.0, 0.0]"
+    ```
+
+    `arm_control` 包含 UR20 的 6 自由度硬件抽象（`PositionJointInterface`）、
+    `arm_control_node` 的 read → update → write 控制循环，以及关节限位、
+    `joint_state_controller`、轨迹控制器和组位置控制器的配置。
+    轨迹模式下可以用 `rqt_joint_trajectory_controller` 拖动关节，
+    也可以向 `/arm_trajectory_controller/follow_joint_trajectory` 发送 action 目标；
+    最简单的是直接用话题接口发一段轨迹（无需额外客户端）：
+
+    ```bash
+    rostopic pub -1 /arm_trajectory_controller/command trajectory_msgs/JointTrajectory \
+      "{joint_names: [shoulder_pan_joint, shoulder_lift_joint, elbow_joint, wrist_1_joint, wrist_2_joint, wrist_3_joint], points: [{positions: [0.5, -1.2, 1.2, -1.0, 0.0, 0.0], time_from_start: {secs: 3, nsecs: 0}}]}"
+    ```
+
+    加 `rviz:=false` 可关闭可视化窗口。
+
+    依赖：`rosdep install --from-paths src --ignore-src -r -y`（需要
+    `joint_trajectory_controller`、`position_controllers` 等 ros_controllers 包）。
 
 
 ## 交流讨论

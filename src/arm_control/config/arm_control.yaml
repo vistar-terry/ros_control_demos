@@ -1,0 +1,133 @@
+# =============================================================================
+# UR20 机械臂 ros_control 配置
+#
+# 关节名来自 arm_description/urdf/inc/ur_macro.xacro（prefix 为空），
+# 顺序与 ur_transmissions.xacro 中的 6 个 transmission 保持一致。
+# 单位：位置 rad、速度 rad/s、力矩 N*m
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# 硬件抽象节点 (arm_control_node) 读取
+# -----------------------------------------------------------------------------
+hardware_interface:
+  joints:
+    - shoulder_pan_joint
+    - shoulder_lift_joint
+    - elbow_joint
+    - wrist_1_joint
+    - wrist_2_joint
+    - wrist_3_joint
+  # 上电初始位姿，顺序与 joints 一致；不配置则全部为 0
+  initial_positions: [0.0, -1.5708, 1.5708, -1.5708, 0.0, 0.0]
+
+# -----------------------------------------------------------------------------
+# 关节限位：joint_trajectory_controller 与硬件接口 (write 中的钳位) 共用
+# 数值与 arm_description/config/ur20/joint_limits.yaml 保持一致，
+# 这里写成普通浮点数，避免 !degrees 这类 xacro 自定义 YAML 标签。
+# -----------------------------------------------------------------------------
+joint_limits:
+  shoulder_pan_joint:
+    has_position_limits: true
+    min_position: -6.283185307
+    max_position:  6.283185307
+    has_velocity_limits: true
+    max_velocity: 2.094395102
+    has_acceleration_limits: false
+    has_effort_limits: true
+    max_effort: 730.0
+  shoulder_lift_joint:
+    has_position_limits: true
+    min_position: -6.283185307
+    max_position:  6.283185307
+    has_velocity_limits: true
+    max_velocity: 2.094395102
+    has_acceleration_limits: false
+    has_effort_limits: true
+    max_effort: 730.0
+  elbow_joint:
+    has_position_limits: true
+    min_position: -3.141592654
+    max_position:  3.141592654
+    has_velocity_limits: true
+    max_velocity: 2.617993878
+    has_acceleration_limits: false
+    has_effort_limits: true
+    max_effort: 430.0
+  wrist_1_joint:
+    has_position_limits: true
+    min_position: -6.283185307
+    max_position:  6.283185307
+    has_velocity_limits: true
+    max_velocity: 3.665191429
+    has_acceleration_limits: false
+    has_effort_limits: true
+    max_effort: 100.0
+  wrist_2_joint:
+    has_position_limits: true
+    min_position: -6.283185307
+    max_position:  6.283185307
+    has_velocity_limits: true
+    max_velocity: 3.665191429
+    has_acceleration_limits: false
+    has_effort_limits: true
+    max_effort: 100.0
+  wrist_3_joint:
+    has_position_limits: true
+    min_position: -6.283185307
+    max_position:  6.283185307
+    has_velocity_limits: true
+    max_velocity: 3.665191429
+    has_acceleration_limits: false
+    has_effort_limits: true
+    max_effort: 100.0
+
+# -----------------------------------------------------------------------------
+# 关节状态发布（robot_state_publisher 依赖 /joint_states）
+# -----------------------------------------------------------------------------
+joint_state_controller:
+  type: "joint_state_controller/JointStateController"
+  publish_rate: 50
+
+# -----------------------------------------------------------------------------
+# 默认控制器：位置轨迹控制器
+# 提供 /arm_trajectory_controller/follow_joint_trajectory action，
+# 可被 MoveIt、rqt_joint_trajectory_controller 或自定义 action client 调用
+# -----------------------------------------------------------------------------
+arm_trajectory_controller:
+  type: "position_controllers/JointTrajectoryController"
+  joints:
+    - shoulder_pan_joint
+    - shoulder_lift_joint
+    - elbow_joint
+    - wrist_1_joint
+    - wrist_2_joint
+    - wrist_3_joint
+  constraints:
+    goal_time: 0.6
+    stopped_velocity_tolerance: 0.05
+    shoulder_pan_joint:  {trajectory: 0.20, goal: 0.01}
+    shoulder_lift_joint: {trajectory: 0.20, goal: 0.01}
+    elbow_joint:         {trajectory: 0.20, goal: 0.01}
+    wrist_1_joint:       {trajectory: 0.20, goal: 0.01}
+    wrist_2_joint:       {trajectory: 0.20, goal: 0.01}
+    wrist_3_joint:       {trajectory: 0.20, goal: 0.01}
+  stop_trajectory_duration: 0.5
+  state_publish_rate: 50
+  action_monitor_rate: 20
+
+# -----------------------------------------------------------------------------
+# 备选控制器：一组关节角度直接下发
+# roslaunch arm_control arm_control.launch controller:=arm_position_controller
+# rostopic pub -1 /arm_position_controller/command std_msgs/Float64MultiArray \
+#   "data: [0.0, -1.57, 1.57, -1.57, 0.0, 0.0]"
+# 两个控制器占用同一批关节，不能同时运行，launch 中二选一。
+# -----------------------------------------------------------------------------
+arm_position_controller:
+  type: "position_controllers/JointGroupPositionController"
+  joints:
+    - shoulder_pan_joint
+    - shoulder_lift_joint
+    - elbow_joint
+    - wrist_1_joint
+    - wrist_2_joint
+    - wrist_3_joint
