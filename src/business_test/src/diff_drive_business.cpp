@@ -1,3 +1,13 @@
+/**
+ * @file diff_drive_business.cpp
+ * @author 万俟淋曦 
+ * @brief 差速底盘业务节点：循环向 /diff_drive_controller/cmd_vel 发布速度指令，
+ *        交替执行直行与原地旋转。
+ * @date 2026-11-15 11:08:25
+ * 
+ * @copyright Copyright (c) 2026
+ * 
+ */
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
 

@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- 机械臂模拟业务：末端遍历"整机可达活动范围包围盒"的 8 个顶点。
+         与 diff_drive_business.launch 一样，先启动 ros_control，再启动业务节点。 -->
+
+    <arg name="rviz" default="true" />
+    <arg name="control_rate" default="100.0" />
+    <arg name="cube_side" default="0.0" doc="Force the workspace box into a cube of this side (m); 0 = auto AABB of the reachable range" />
+    <arg name="bbox_margin" default="0.0" doc="Outward margin over the reachable workspace box (ratio)" />
+    <arg name="max_reach" default="1.75" doc="Nominal reach from the shoulder joint (m); UR20 = 1.75, the box is the AABB of this sphere" />
+    <arg name="reach_ratio" default="1.0" doc="Upper bound of the radial ratio used to project box corners into the reach sphere; lowered automatically until all 8 vertices are reachable" />
+    <arg name="min_z" default="0.2" doc="Minimum height of the traversed vertices (m)" />
+    <arg name="link_radius" default="0.075" doc="Approximate link radius (m) added to the reach radius of the workspace box" />
+    <arg name="ground_clearance" default="0.10" doc="Minimum height (m) of every arm link axis above the ground; targets whose IK pose dips below this are rejected so the arm never touches the floor" />
+    <arg name="traverse_time" default="2.2" doc="Travel time between adjacent vertices (s); larger = slower and smoother" />
+    <arg name="hold_time" default="0.3" doc="Hold time after reaching a vertex (s)" />
+    <arg name="loops" default="0" doc="Number of traversal loops; 0 means infinite" />
+    <arg name="orientation_mode" default="1" doc="0 = keep startup end-effector pose; 1 = tool Z axis parallel to the reach-sphere radius, pointing outward (controllable via tool_roll)" />
+    <arg name="tool_roll" default="0.0" doc="Roll angle about the tool Z axis (radial axis) in radial mode (rad); controls the end-effector orientation angle" />
+    <arg name="random_order" default="false" doc="If true, shuffle the 8 vertices each round (breaks Gray-code adjacency)" />
+
+    <!-- 业务节点通过 follow_joint_trajectory action 下发轨迹，必须用轨迹控制器 -->
+    <include file="$(find arm_control)/launch/arm_control.launch">
+        <arg name="controller" value="arm_trajectory_controller" />
+        <arg name="rviz" value="$(arg rviz)" />
+        <arg name="control_rate" value="$(arg control_rate)" />
+    </include>
+
+    <node name="arm_business" pkg="business_test" type="arm_business" output="screen">
+        <param name="cube_side" type="double" value="$(arg cube_side)" />
+        <param name="bbox_margin" type="double" value="$(arg bbox_margin)" />
+        <param name="max_reach" type="double" value="$(arg max_reach)" />
+        <param name="reach_ratio" type="double" value="$(arg reach_ratio)" />
+        <param name="min_z" type="double" value="$(arg min_z)" />
+        <param name="link_radius" type="double" value="$(arg link_radius)" />
+        <param name="ground_clearance" type="double" value="$(arg ground_clearance)" />
+        <param name="traverse_time" type="double" value="$(arg traverse_time)" />
+        <param name="hold_time" type="double" value="$(arg hold_time)" />
+        <param name="loops" type="int" value="$(arg loops)" />
+        <param name="orientation_mode" type="int" value="$(arg orientation_mode)" />
+        <param name="tool_roll" type="double" value="$(arg tool_roll)" />
+        <param name="random_order" type="bool" value="$(arg random_order)" />
+    </node>
+
+</launch>

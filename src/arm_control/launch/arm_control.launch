@@ -30,6 +30,9 @@
 
     <!-- 6. RViz 可视化 -->
     <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz"
-          args="-d $(find arm_control)/config/arm_control.rviz" />
+        args="-d $(find arm_control)/config/arm_control.rviz">
+        <!-- 强制 OpenGL 使用软件渲染 -->
+        <env name="LIBGL_ALWAYS_SOFTWARE" value="1" /> 
+    </node>
 
 </launch>

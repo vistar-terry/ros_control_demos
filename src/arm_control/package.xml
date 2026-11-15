@@ -51,41 +51,21 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <!-- 编译 / 运行都需要 -->
-  <build_depend>roscpp</build_depend>
-  <build_depend>rospy</build_depend>
-  <build_depend>std_msgs</build_depend>
-  <build_depend>urdf</build_depend>
-  <build_depend>xacro</build_depend>
-  <build_depend>hardware_interface</build_depend>
-  <build_depend>controller_manager</build_depend>
-  <build_depend>joint_limits_interface</build_depend>
-  <build_depend>joint_state_controller</build_depend>
-  <build_depend>position_controllers</build_depend>
-  <build_depend>joint_trajectory_controller</build_depend>
-  <build_depend>robot_state_publisher</build_depend>
-  <build_export_depend>roscpp</build_export_depend>
-  <build_export_depend>rospy</build_export_depend>
-  <build_export_depend>std_msgs</build_export_depend>
-  <build_export_depend>urdf</build_export_depend>
-  <build_export_depend>xacro</build_export_depend>
-  <build_export_depend>hardware_interface</build_export_depend>
-  <build_export_depend>controller_manager</build_export_depend>
-  <build_export_depend>joint_limits_interface</build_export_depend>
-  <build_export_depend>joint_state_controller</build_export_depend>
-  <build_export_depend>position_controllers</build_export_depend>
-  <build_export_depend>joint_trajectory_controller</build_export_depend>
-  <build_export_depend>robot_state_publisher</build_export_depend>
+  <depend>roscpp</depend>
+  <depend>hardware_interface</depend>
+  <depend>controller_manager</depend>
+  <depend>joint_limits_interface</depend>
 
   <!-- 控制器插件，launch 中通过 controller_manager 加载 -->
-  <exec_depend>joint_state_controller</exec_depend>
-  <exec_depend>position_controllers</exec_depend>
-  <exec_depend>joint_trajectory_controller</exec_depend>
+  <depend>joint_state_controller</depend>
+  <depend>position_controllers</depend>
+  <depend>joint_trajectory_controller</depend>
 
   <!-- 模型、TF 与可视化 -->
-  <exec_depend>arm_description</exec_depend>
-  <exec_depend>urdf</exec_depend>
-  <exec_depend>xacro</exec_depend>
-  <exec_depend>robot_state_publisher</exec_depend>
+  <depend>arm_description</depend>
+  <depend>urdf</depend>
+  <depend>xacro</depend>
+  <depend>robot_state_publisher</depend>
   <exec_depend>rviz</exec_depend>
 
   <export>
